@@ -10,11 +10,11 @@ public class UnitController : MonoBehaviour
 {
     [Header("기본 능력치")]
     [Tooltip("체력, 공격력, 속도 등의 기본 능력치입니다.")]
-    public UnitStats baseStats;
+    public UnitStats BaseStats;
 
-    private UnitState state;
-    private BattleController battleController;
-    private UnitController currentTarget;
+    private UnitState _state;
+    private BattleController _battleController;
+    private UnitController _currentTarget;
 
     /// <summary>
     /// 유닛이 속한 팀
@@ -24,42 +24,43 @@ public class UnitController : MonoBehaviour
     /// <summary>
     /// 현재 상태를 외부에서 읽기 전용으로 접근하기 위한 프로퍼티
     /// </summary>
-    public UnitState State => state;
+    public UnitState State => _state;
 
     /// <summary>
     /// BattleController를 설정합니다.
     /// </summary>
     public void SetBattleController(BattleController controller)
     {
-        battleController = controller;
+        _battleController = controller;
     }
 
+    // 나중에 Init이라는 함수로 초기설정 대체할 예정
     void Awake()
     {
         // 상태 초기화
-        state = new UnitState
+        _state = new UnitState
         {
-            CurrentHP = baseStats != null ? baseStats.MaxHP : 100f,
+            CurrentHP = BaseStats != null ? BaseStats.MaxHP : 100f,
             AttackCooldown = 0f
         };
     }
 
     void Update()
     {
-        if (state.IsDead)
+        if (_state.IsDead)
             return;
 
-        if (state.AttackCooldown > 0f)
-            state.AttackCooldown -= Time.deltaTime;
+        if (_state.AttackCooldown > 0f)
+            _state.AttackCooldown -= Time.deltaTime;
 
-        if (currentTarget == null || currentTarget.State.IsDead)
+        if (_currentTarget == null || _currentTarget.State.IsDead)
             AcquireTarget();
 
-        if (currentTarget != null && !currentTarget.State.IsDead)
+        if (_currentTarget != null && !_currentTarget.State.IsDead)
         {
-            float distance = Vector3.Distance(transform.position, currentTarget.transform.position);
+            float distance = Vector3.Distance(transform.position, _currentTarget.transform.position);
 
-            if (distance <= baseStats.AttackRange)
+            if (distance <= BaseStats.AttackRange)
                 TryAttack();
             else
                 MoveTowardsTarget();
@@ -71,10 +72,10 @@ public class UnitController : MonoBehaviour
     /// </summary>
     private void AcquireTarget()
     {
-        if (battleController == null)
+        if (_battleController == null)
             return;
 
-        IList<UnitController> opponents = battleController.GetOpponents(Team);
+        IList<UnitController> opponents = _battleController.GetOpponents(Team);
 
         float closestDistance = float.MaxValue;
         UnitController closestUnit = null;
@@ -93,7 +94,7 @@ public class UnitController : MonoBehaviour
             }
         }
 
-        currentTarget = closestUnit;
+        _currentTarget = closestUnit;
     }
 
     /// <summary>
@@ -101,8 +102,8 @@ public class UnitController : MonoBehaviour
     /// </summary>
     private void MoveTowardsTarget()
     {
-        Vector3 direction = (currentTarget.transform.position - transform.position).normalized;
-        Vector3 movement = direction * baseStats.MoveSpeed * Time.deltaTime;
+        Vector3 direction = (_currentTarget.transform.position - transform.position).normalized;
+        Vector3 movement = direction * BaseStats.MoveSpeed * Time.deltaTime;
         transform.position += movement;
     }
 
@@ -111,13 +112,13 @@ public class UnitController : MonoBehaviour
     /// </summary>
     private void TryAttack()
     {
-        if (state.AttackCooldown > 0f || currentTarget == null)
+        if (_state.AttackCooldown > 0f || _currentTarget == null)
             return;
 
-        currentTarget.TakeDamage(baseStats.Attack);
+        _currentTarget.TakeDamage(BaseStats.Attack);
 
-        state.AttackCooldown = baseStats.AttackSpeed > 0f
-            ? 1f / baseStats.AttackSpeed
+        _state.AttackCooldown = BaseStats.AttackSpeed > 0f
+            ? 1f / BaseStats.AttackSpeed
             : 0f;
     }
 
@@ -127,12 +128,12 @@ public class UnitController : MonoBehaviour
     /// </summary>
     public void TakeDamage(float amount)
     {
-        if (state.IsDead)
+        if (_state.IsDead)
             return;
 
-        state.CurrentHP -= amount;
+        _state.CurrentHP -= amount;
 
-        if (state.CurrentHP <= 0f)
+        if (_state.CurrentHP <= 0f)
             Die();
     }
 
@@ -141,10 +142,10 @@ public class UnitController : MonoBehaviour
     /// </summary>
     private void Die()
     {
-        state.CurrentHP = 0f;
+        _state.CurrentHP = 0f;
 
-        if (battleController != null)
-            battleController.NotifyUnitDied(this);
+        if (_battleController != null)
+            _battleController.NotifyUnitDied(this);
 
         gameObject.SetActive(false);
     }

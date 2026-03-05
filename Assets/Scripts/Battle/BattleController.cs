@@ -8,10 +8,10 @@ using UnityEngine;
 /// </summary>
 public class BattleController : MonoBehaviour
 {
-    private List<UnitController> allies;
-    private List<UnitController> enemies;
+    private List<UnitController> _allies;
+    private List<UnitController> _enemies;
 
-    private bool battleActive;
+    private bool _battleActive;
 
     /// <summary>
     /// 아군과 적군 리스트로 전투를 초기화합니다.
@@ -20,9 +20,9 @@ public class BattleController : MonoBehaviour
     /// </summary>
     public void InitializeBattle(List<UnitController> allies, List<UnitController> enemies)
     {
-        this.allies = allies;
-        this.enemies = enemies;
-        battleActive = true;
+        _allies = allies;
+        _enemies = enemies;
+        _battleActive = true;
 
         Debug.Log("전투 시작 - 아군: " + allies.Count + " / 적군: " + enemies.Count);
     }
@@ -32,7 +32,7 @@ public class BattleController : MonoBehaviour
     /// </summary>
     public IList<UnitController> GetOpponents(UnitTeam team)
     {
-        return team == UnitTeam.Ally ? enemies : allies;
+        return team == UnitTeam.Ally ? _enemies : _allies;
     }
 
     /// <summary>
@@ -43,9 +43,9 @@ public class BattleController : MonoBehaviour
     public void NotifyUnitDied(UnitController unit)
     {
         if (unit.Team == UnitTeam.Ally)
-            allies.Remove(unit);
+            _allies.Remove(unit);
         else
-            enemies.Remove(unit);
+            _enemies.Remove(unit);
 
         CheckBattleEnd();
     }
@@ -56,15 +56,15 @@ public class BattleController : MonoBehaviour
     /// </summary>
     private void CheckBattleEnd()
     {
-        if (!battleActive)
+        if (!_battleActive)
             return;
 
-        bool alliesAlive = allies != null && allies.Count > 0;
-        bool enemiesAlive = enemies != null && enemies.Count > 0;
+        bool alliesAlive = _allies != null && _allies.Count > 0;
+        bool enemiesAlive = _enemies != null && _enemies.Count > 0;
 
         if (!alliesAlive || !enemiesAlive)
         {
-            battleActive = false;
+            _battleActive = false;
             string winner = alliesAlive ? "아군 승리" : "적군 승리";
             Debug.Log("전투 종료 - 결과: " + winner);
         }
