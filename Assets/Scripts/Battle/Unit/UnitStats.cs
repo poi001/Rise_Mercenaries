@@ -1,16 +1,6 @@
 using UnityEngine;
 
 /// <summary>
-/// 유닛이 속한 팀을 정의하는 열거형입니다.
-/// 기본적으로 아군과 적군 두 팀이 있습니다.
-/// </summary>
-public enum UnitTeam
-{
-    Ally,
-    Enemy
-}
-
-/// <summary>
 /// 유닛의 기본 능력치를 정의합니다.
 /// 전투 중 변경되지 않는 값입니다.
 /// </summary>
