@@ -16,19 +16,19 @@ public class UnitController : MonoBehaviour
     private BattleController _battleController;
     private UnitController _currentTarget;
 
-    /// <summary>
-    /// 유닛이 속한 팀
-    /// </summary>
+    // 액션들
+    private UnitTargeting _unitTargeting;
+
+    //public CharacterStateMachine StateMachine { get; private set; }
+    //public CharacterAnimationData AnimationData { get; protected set; }
+
+    // 유닛이 속한 팀
     public EUnitTeam Team { get; set; }
 
-    /// <summary>
-    /// 현재 상태를 외부에서 읽기 전용으로 접근하기 위한 프로퍼티
-    /// </summary>
+    // 현재 상태를 외부에서 읽기 전용으로 접근하기 위한 프로퍼티
     public UnitState State => _state;
 
-    /// <summary>
-    /// BattleController를 설정합니다.
-    /// </summary>
+    // BattleController를 설정합니다.
     public void SetBattleController(BattleController controller)
     {
         _battleController = controller;
