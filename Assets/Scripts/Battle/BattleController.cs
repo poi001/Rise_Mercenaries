@@ -30,9 +30,9 @@ public class BattleController : MonoBehaviour
     /// <summary>
     /// 특정 팀 기준으로 상대 유닛 목록을 반환합니다.
     /// </summary>
-    public IList<UnitController> GetOpponents(UnitTeam team)
+    public IList<UnitController> GetOpponents(EUnitTeam team)
     {
-        return team == UnitTeam.Ally ? _enemies : _allies;
+        return team == EUnitTeam.Ally ? _enemies : _allies;
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public class BattleController : MonoBehaviour
     /// </summary>
     public void NotifyUnitDied(UnitController unit)
     {
-        if (unit.Team == UnitTeam.Ally)
+        if (unit.Team == EUnitTeam.Ally)
             _allies.Remove(unit);
         else
             _enemies.Remove(unit);

@@ -19,7 +19,7 @@ public class UnitController : MonoBehaviour
     /// <summary>
     /// 유닛이 속한 팀
     /// </summary>
-    public UnitTeam Team { get; set; }
+    public EUnitTeam Team { get; set; }
 
     /// <summary>
     /// 현재 상태를 외부에서 읽기 전용으로 접근하기 위한 프로퍼티

@@ -57,7 +57,7 @@ public class BattleBootstrap : MonoBehaviour
                 continue;
             }
 
-            unit.Team = UnitTeam.Ally;
+            unit.Team = EUnitTeam.Ally;
             unit.SetBattleController(_battleController);
             allies.Add(unit);
         }
@@ -75,7 +75,7 @@ public class BattleBootstrap : MonoBehaviour
                 continue;
             }
 
-            unit.Team = UnitTeam.Enemy;
+            unit.Team = EUnitTeam.Enemy;
             unit.SetBattleController(_battleController);
             enemies.Add(unit);
         }
