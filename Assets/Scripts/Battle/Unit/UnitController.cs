@@ -40,7 +40,7 @@ public class UnitController : MonoBehaviour
         // 상태 초기화
         _state = new UnitState
         {
-            CurrentHP = BaseStats != null ? BaseStats.MaxHP : 100f,
+            CurrentHP = BaseStats != null ? BaseStats.MaxHP.FinalValue : 100f,
             AttackCooldown = 0f
         };
     }
@@ -60,7 +60,7 @@ public class UnitController : MonoBehaviour
         {
             float distance = Vector3.Distance(transform.position, _currentTarget.transform.position);
 
-            if (distance <= BaseStats.AttackRange)
+            if (distance <= BaseStats.Range.FinalValue)
                 TryAttack();
             else
                 MoveTowardsTarget();
@@ -103,7 +103,7 @@ public class UnitController : MonoBehaviour
     private void MoveTowardsTarget()
     {
         Vector3 direction = (_currentTarget.transform.position - transform.position).normalized;
-        Vector3 movement = direction * BaseStats.MoveSpeed * Time.deltaTime;
+        Vector3 movement = direction * BaseStats.MS.FinalValue * Time.deltaTime;
         transform.position += movement;
     }
 
@@ -115,10 +115,10 @@ public class UnitController : MonoBehaviour
         if (_state.AttackCooldown > 0f || _currentTarget == null)
             return;
 
-        _currentTarget.TakeDamage(BaseStats.Attack);
+        _currentTarget.TakeDamage(BaseStats.AD.FinalValue);
 
-        _state.AttackCooldown = BaseStats.AttackSpeed > 0f
-            ? 1f / BaseStats.AttackSpeed
+        _state.AttackCooldown = BaseStats.AS.FinalValue > 0f
+            ? 1f / BaseStats.AS.FinalValue
             : 0f;
     }
 
