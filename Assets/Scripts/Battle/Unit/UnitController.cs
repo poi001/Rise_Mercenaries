@@ -67,34 +67,10 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 가장 가까운 적을 탐색하여 타겟으로 설정합니다.
-    /// </summary>
+    // 타겟 탐색
     private void AcquireTarget()
     {
-        if (_battleController == null)
-            return;
-
-        IList<UnitController> opponents = _battleController.GetOpponents(Team);
-
-        float closestDistance = float.MaxValue;
-        UnitController closestUnit = null;
-
-        foreach (UnitController unit in opponents)
-        {
-            if (unit == null || unit.State.IsDead)
-                continue;
-
-            float dist = Vector3.Distance(transform.position, unit.transform.position);
-
-            if (dist < closestDistance)
-            {
-                closestDistance = dist;
-                closestUnit = unit;
-            }
-        }
-
-        _currentTarget = closestUnit;
+        _unitTargeting.AcquireTarget(_battleController, out _currentTarget, Team);
     }
 
     /// <summary>
